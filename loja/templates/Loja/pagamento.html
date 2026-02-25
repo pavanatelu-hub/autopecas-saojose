@@ -1,0 +1,8 @@
+<div class="container text-center py-5">
+    <h2>Quase lá! Escaneie o Pix</h2>
+    <img src="data:image/png;base64, {{ qrcode_base64 }}" class="img-fluid my-4">
+    <div class="alert alert-secondary">
+        <code>{{ pix_code }}</code>
+    </div>
+    <p>O envio será processado assim que o pagamento for confirmado.</p>
+</div>

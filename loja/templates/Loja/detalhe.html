@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>{{ produto.nome }} - Autopeças São José</title>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container"><a class="navbar-brand" href="/">⬅ Voltar para a Loja</a></div>
+    </nav>
+
+    <div class="container bg-white p-4 shadow-sm rounded">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ produto.imagem.url }}" class="img-fluid rounded border" alt="{{ produto.nome }}">
+            </div>
+            <div class="col-md-6">
+                <h1 class="fw-bold">{{ produto.nome }}</h1>
+                <p class="text-muted">Código: {{ produto.codigo_original }}</p>
+                <hr>
+                <h3 class="text-success fw-bold">R$ {{ produto.preco }}</h3>
+                <p><strong>Compatibilidade:</strong><br>{{ produto.compatibilidade }}</p>
+                
+                <div class="card p-3 my-3 bg-light">
+                    <h5>Calcular Frete</h5>
+                    <div class="input-group mb-2">
+                        <input type="text" id="cep" class="form-control" placeholder="Digite seu CEP">
+                        <button class="btn btn-dark" type="button" onclick="calcularFrete()">Calcular</button>
+                    </div>
+                    <div id="resultado-frete"></div> </div>
+
+                <a href="{% url 'checkout' produto.id %}" class="btn btn-primary btn-lg w-100 mb-2">
+                    💳 Pagar com Pix agora
+                </a>
+
+                <a href="https://wa.me/55SEUNUMERO?text=Tenho interesse no: {{ produto.nome }}" class="btn btn-success btn-lg w-100">
+                    Comprar via WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function calcularFrete() {
+        const cep = document.getElementById('cep').value;
+        const resultDiv = document.getElementById('resultado-frete');
+        
+        resultDiv.innerHTML = '<p class="text-muted small text-center">Buscando preços...</p>';
+        
+        // Chamada para a rota do Django
+        fetch(`/calcular-frete/?cep=${cep}&produto_id={{ produto.id }}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.opcoes.length === 0) {
+                    resultDiv.innerHTML = '<p class="text-danger small">Nenhuma transportadora disponível.</p>';
+                    return;
+                }
+                let html = '<ul class="list-group mt-2 shadow-sm">';
+                data.opcoes.forEach(op => {
+                    html += `<li class="list-group-item d-flex justify-content-between align-items-center" style="font-size: 0.85rem;">
+                                <span><strong>${op.nome}</strong><br><small class="text-muted">${op.prazo}</small></span>
+                                <span class="badge bg-success">R$ ${op.valor}</span>
+                             </li>`;
+                });
+                html += '</ul>';
+                resultDiv.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                resultDiv.innerHTML = '<p class="text-danger small">Erro ao conectar com o frete.</p>';
+            });
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autopeças São José - As melhores peças com o melhor preço</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/lux/bootstrap.min.css" rel="stylesheet">
+    <style>
+    :root {
+        --dark-bg: #121212;
+        --accent-red: #e63946;
+        --card-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+    .navbar { background-color: var(--dark-bg) !important; border-bottom: 3px solid var(--accent-red); }
+    .card { border: none; transition: transform 0.3s; box-shadow: var(--card-shadow); border-radius: 12px; overflow: hidden; }
+    .card:hover { transform: translateY(-5px); }
+    .btn-buy { background-color: var(--accent-red); color: white; border-radius: 8px; border: none; transition: 0.3s; }
+    .btn-buy:hover { background-color: #c1121f; transform: scale(1.02); }
+    .list-group-item.active { background-color: var(--accent-red); border-color: var(--accent-red); }
+</style>
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">🚗 Autopeças São José</a>
+            <span class="text-white d-none d-md-block">Peças de Carro e Moto para todo o Brasil</span>
+        </div>
+    </nav>
+<div class="container my-4">
+    <form action="{% url 'vitrine' %}" method="GET" class="d-flex">
+        <input class="form-control me-2" type="search" name="busca" placeholder="Ex: Cabo embreagem ou Chevette..." aria-label="Search">
+        <button class="btn btn-outline-danger" type="submit">Buscar</button>
+    </form>
+</div>
+   <div class="container">
+    <div class="row">
+        <div class="col-md-3 d-none d-md-block">
+            <h4 class="mb-3">Categorias</h4>
+            <div class="list-group">
+                <a href="/" class="list-group-item list-group-item-action">Todas as Peças</a>
+                {% for categoria in categorias %}
+                <a href="?categoria={{ categoria.id }}" class="list-group-item list-group-item-action">
+                    {{ categoria.nome }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-md-9">
+    <h2 class="mb-4">Destaques em Oferta</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for produto in produtos %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <a href="{% url 'detalhe_produto' produto.id %}">
+                    {% if produto.imagem %}
+                        <img src="{{ produto.imagem.url }}" class="card-img-top" alt="{{ produto.nome }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/300x200?text=Sem+Foto" class="card-img-top">
+                    {% endif %}
+                </a>
+                
+                <div class="card-body">
+                    <a href="{% url 'detalhe_produto' produto.id %}" class="text-decoration-none text-dark">
+                        <h5 class="card-title">{{ produto.nome }}</h5>
+                    </a>
+                    
+                    <p class="compatibilidade"><strong>Aplica:</strong> {{ produto.compatibilidade }}</p>
+                    <p class="price">R$ {{ produto.preco }}</p>
+                    
+                    <a href="https://wa.me/55SEUNUMERO?text=Olá! Vi o produto {{ produto.nome }} no site e gostaria de fechar a compra." 
+                       target="_blank" class="btn btn-buy w-100 py-2">
+                        Comprar pelo WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="alert alert-warning">Nenhum produto encontrado.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>

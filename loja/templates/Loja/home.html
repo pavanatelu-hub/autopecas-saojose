@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Autopeças São José</title>
+    <style>
+        .produto-card { border: 1px solid #ccc; padding: 15px; margin: 10px; display: inline-block; width: 200px; }
+        .preco { color: green; font-weight: bold; }
+        .btn-zap { background: #25d366; color: white; padding: 10px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Autopeças São José 🚗🏍️</h1>
+    <hr>
+    <div class="lista-produtos">
+        {% for produto in produtos %}
+        <div class="produto-card">
+            <h3>{{ produto.nome }}</h3>
+            <p>Compatível: {{ produto.compatibilidade }}</p>
+            <p class="preco">R$ {{ produto.preco }}</p>
+            <a href="https://wa.me/48998571691" class="btn-zap">Comprar via Zap</a>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
