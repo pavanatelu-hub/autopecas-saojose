@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from loja.views import criar_adm_provisorio
 # Importamos todas as funções que criamos na views da loja
 from loja.views import vitrine, detalhe_produto, calcular_frete, checkout, finalizar_pedido, criar_adm_provisorio
 
@@ -19,7 +20,7 @@ urlpatterns = [
     path('calcular-frete/', calcular_frete, name='calcular_frete'),
     path('checkout/<int:id>/', checkout, name='checkout'),
     path('finalizar_pedido/<int:id>/', finalizar_pedido, name='finalizar_pedido'),
-  path('setup-adm/', view=criar_adm_provisorio),
+    path('setup-adm/', criar_adm_provisorio),
 ]
 
 # Configuração para as imagens das peças aparecerem

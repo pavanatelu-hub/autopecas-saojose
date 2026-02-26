@@ -115,7 +115,8 @@ def finalizar_pedido(request, id):
             'qrcode_base64': pix_res.get('encodedImage')
         })
     
-    from django.contrib.auth.models import User
+    # No final do views.py
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 
 def criar_adm_provisorio(request):
