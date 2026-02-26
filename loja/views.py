@@ -114,3 +114,12 @@ def finalizar_pedido(request, id):
             'pix_code': pix_res.get('payload'),
             'qrcode_base64': pix_res.get('encodedImage')
         })
+    
+    from django.contrib.auth.models import User
+from django.http import HttpResponse
+
+def criar_adm_provisorio(request):
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser("admin", "admin@email.com", "senha123")
+        return HttpResponse("Dono do site criado! Usuario: admin, Senha: senha123")
+    return HttpResponse("O administrador ja existe.")
